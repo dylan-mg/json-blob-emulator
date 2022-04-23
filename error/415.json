@@ -1,0 +1,8 @@
+{
+    "message": "Unsupported Media Type, Please Try Again",
+    "_links": {
+        "self": {
+            "href": "/api/get/"
+        }
+    }
+}

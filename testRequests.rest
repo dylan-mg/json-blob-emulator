@@ -1,0 +1,56 @@
+# GET req for dogs jsonblob
+GET http://localhost:1337/api/jsonblob/0
+Content-Type: application/json
+
+###
+# I made the beatles
+POST http://localhost:1337/api/jsonblob
+Content-Type: application/json
+
+{
+    "Test" : 7,
+    "Test2" : 7,
+    "Test3" : 7,
+    "Test4" : 7,
+    "Test5" : 7,
+    "Test6" : 7
+}
+
+###
+
+# I updated the beatles
+PUT https://jsonblob.com/api/jsonBlob/960203277589561344
+Content-Type: application/json
+
+{
+    "beatles" : [
+        {
+            "firstName":"John",
+            "lastName":"Lennon"
+        },
+        {
+            "firstName":"Paul",
+            "lastName":"McCartney"
+        },
+        {
+            "firstName":"Ringo",
+            "lastName":"Starr"
+        }
+    ]
+}
+
+###
+
+# I found the beatles
+GET http://jsonblob.com/api/jsonBlob/948647879648755712
+Content-Type: application/json
+
+{}
+###
+
+# I am going to kill the Beatles.
+DELETE https://jsonblob.com/api/jsonBlob/948647879648755712
+Content-Type: application/json
+
+{}
+###

@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // ensures content type is json
 app.use((req, res, next) => {
     if (req.headers['content-type'] == 'application/json') {
+        res.contentType('application/json');
         next();
     } else {
         if (req.params.blobID) {
@@ -30,8 +31,6 @@ app.listen(port, () => {
 });
 
 app.get("/api/jsonblob/:fileName", (req, res) => {
-    // designate response type
-    res.contentType("application/json");
     // checks to read the file
     fs.readFile(`${BlobPath}/${req.params.fileName}.json`, (err, data) => {
         // if there's an error, 

@@ -42,14 +42,14 @@ Content-Type: application/json
 ###
 
 # I found the beatles
-GET http://jsonblob.com/api/jsonBlob/948647879648755712
+GET http://localhost:1337/api/jsonblob/1650687700016
 Content-Type: application/json
 
 {}
 ###
 
 # I am going to kill the Beatles.
-DELETE https://jsonblob.com/api/jsonBlob/948647879648755712
+DELETE http://localhost:1337/api/jsonblob/1650687700016
 Content-Type: application/json
 
 {}

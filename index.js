@@ -78,5 +78,23 @@ app.put("/api/jsonblob/:blobID", (req, res) => {
 });
 
 app.delete("/api/jsonblob/:blobID", (req, res) => {
-
+    if (req.headers['content-type'] == "application/json") {
+        // if the file exists
+        let fileName = `${BlobPath}/${req.params.blobID}.json`;
+        if (fs.existsSync(fileName)) {
+            fs.rm(fileName, (err) => {
+                if (err) {
+                    fHelp.errorMan(500, res, req.params.blobID);
+                } else {
+                    res.status(200);
+                    res.send({ message: `Blob ${req.params.blobID} Deleted` });
+                }
+            })
+        } else {
+            fHelp.errorMan(404, res, req.params.blobID);
+        }
+    } else {
+        // if not JSON, return 415 for unsupported media type
+        fHelp.errorMan(415, res, req.params.blobID);
+    }
 });

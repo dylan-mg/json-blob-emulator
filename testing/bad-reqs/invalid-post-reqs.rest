@@ -1,0 +1,26 @@
+# String Request, Bad Req
+POST http://localhost:1337/api/jsonblob
+Content-Type: application/javascript
+
+console.log(this);
+
+###
+# Number Request, Bad Req
+POST http://localhost:1337/api/jsonblob
+Content-Type: application/json
+
+3
+
+###
+
+# incomplete JSON body, Bad Req
+POST http://localhost:1337/api/jsonblob
+Content-Type: application/json
+
+{
+    "Test" : 7,
+    "Test2" : 7,
+    "Test3" : 7,
+    "Test4" : 7,
+    "Test5" : 7,
+    "Test6" : 7

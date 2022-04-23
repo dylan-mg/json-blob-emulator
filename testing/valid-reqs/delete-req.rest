@@ -1,0 +1,5 @@
+# replace after every test
+DELETE http://localhost:1337/api/jsonblob/556431910504
+Content-Type: application/json
+
+{}

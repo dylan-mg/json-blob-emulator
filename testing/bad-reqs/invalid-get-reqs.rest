@@ -1,0 +1,26 @@
+# Filename containing letters, Bad Req
+GET http://localhost:1337/api/jsonblob/1650690908asdf883
+Content-Type: "application/json"
+
+###
+
+# self-taught hacker request, Bad Req
+GET http://localhost:1337/api/jsonblob/..index.js
+Content-Type: "application/json"
+
+### 
+
+# too short of a request, Bad Req
+GET http://localhost:1337/api/jsonblob/0
+Content-Type: "application/json"
+
+### 
+
+# hexadecimal equivalent to real request
+GET http://localhost:1337/api/jsonblob/0x18054D862D3
+Content-Type: "application/json"
+### 
+
+# valid url for not existing blob, 404
+GET http://localhost:1337/api/jsonblob/483957685493
+Content-Type: "application/json"

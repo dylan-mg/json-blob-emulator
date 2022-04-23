@@ -1,0 +1,91 @@
+# invalid content type, 415
+PUT http://localhost:1337/api/jsonblob/697850884385
+Content-Type: application/javascript
+
+{
+    "beatles" : [
+        {
+            "firstName":"John",
+            "lastName":"Lennon"
+        },
+        {
+            "firstName":"Paul",
+            "lastName":"McCartney"
+        },
+        {
+            "firstName":"Ringo",
+            "lastName":"Starr"
+        }
+    ]
+}
+
+### 
+# invalid url, bad req
+PUT http://localhost:1337/api/jsonblob/697850asdf884385
+Content-Type: application/json
+
+{
+    "beatles" : [
+        {
+            "firstName":"John",
+            "lastName":"Lennon"
+        },
+        {
+            "firstName":"Paul",
+            "lastName":"McCartney"
+        },
+        {
+            "firstName":"Ringo",
+            "lastName":"Starr"
+        }
+    ]
+}
+### 
+# valid url for blob that doesn't exist 404
+PUT http://localhost:1337/api/jsonblob/5768450385494
+Content-Type: application/json
+
+{
+    "beatles" : [
+        {
+            "firstName":"John",
+            "lastName":"Lennon"
+        },
+        {
+            "firstName":"Paul",
+            "lastName":"McCartney"
+        },
+        {
+            "firstName":"Ringo",
+            "lastName":"Starr"
+        }
+    ]
+}
+
+### 
+# invalid body, bad req
+PUT http://localhost:1337/api/jsonblob/697850884385
+Content-Type: application/json
+
+"schmeep"
+### 
+
+# invalid JSON, bad req
+PUT http://localhost:1337/api/jsonblob/697850884385
+Content-Type: application/json
+
+{
+    "beatles" : [
+        {
+            "firstName":"John",
+            "lastName":"Lennon"
+        },
+        {
+            "firstName":"Paul",
+            "lastName":"McCartney"
+        },
+        {
+            "firstName":"Ringo",
+            "lastName":"Starr"
+        }
+}

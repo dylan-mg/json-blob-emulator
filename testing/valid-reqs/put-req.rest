@@ -1,0 +1,30 @@
+# get value before put
+GET http://localhost:1337/api/jsonblob/697850884385
+Content-Type: application/json
+
+###
+# Update
+PUT http://localhost:1337/api/jsonblob/697850884385
+Content-Type: application/json
+
+{
+    "beatles" : [
+        {
+            "firstName":"John",
+            "lastName":"Lennon"
+        },
+        {
+            "firstName":"Paul",
+            "lastName":"McCartney"
+        },
+        {
+            "firstName":"Ringo",
+            "lastName":"Starr"
+        }
+    ]
+}
+
+###
+# get value after put to verify
+GET http://localhost:1337/api/jsonblob/697850884385
+Content-Type: application/json

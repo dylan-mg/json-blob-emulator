@@ -1,93 +1,118 @@
-// body-parser for request parsing
+/* Modules */
 const bodyParser = require('body-parser');
-// express for server stuff
 const express = require('express');
-// fs for json files'
 const fs = require('fs');
+const methodOverride = require('method-override')
 const fHelp = require('./modules/fileHelpers');
+const { jsonVerifier, nameVerifiier, jsonHandler } = require('./modules/verifyHelper');
+
+/* Constants */
 const port = 1337;
 const SERVLINK = `http://localhost:${port}`;
 const BlobPath = "./blobs";
 
+/* App and middleware */
 const app = express();
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// ensures content type is json
-app.use((req, res, next) => {
-    if (req.headers['content-type'] == 'application/json') {
-        res.contentType('application/json');
+
+// ensures content type is json, bit without the prior middleware, 
+// will return syntax error on invalid req bodies
+app.use(bodyParser.json());
+
+app.use(methodOverride());
+
+// error handler for errors thrown from above middlewares
+app.use(jsonHandler);
+
+// ensures blobID is valid before contiuing
+app.use("/api/jsonblob/:blobID", (req, res, next) => {
+    // if the name is valid
+    if (nameVerifiier(req.params.blobID)) {
         next();
     } else {
-        if (req.params.blobID) {
-            fHelp.errorMan(415, res, req.params.blobID);
-        } else {
-            fHelp.errorMan(415, res)
-        };
+        fHelp.errorMan(400, res, req.baseUrl);
     }
 });
+
+// Ensures Content type is json, if not, returns error message
+app.use(jsonVerifier);
 
 app.listen(port, () => {
     console.log("Listeneing on port " + port);
 });
 
-app.get("/api/jsonblob/:fileName", (req, res) => {
+/* API Endpoints */
+// Gets a specific blob
+app.get("/api/jsonblob/:blobID", (req, res) => {
+    let fileName = `${BlobPath}/${req.params.blobID}.json`
+
     // checks to read the file
-    fs.readFile(`${BlobPath}/${req.params.fileName}.json`, (err, data) => {
+    fs.readFile(fileName, (err, data) => {
         // if there's an error, 
         if (err) {
             // ...call error handler function
-            fHelp.errorMan(err.errno, res, req.params.fileName);
+            fHelp.errorMan(err.errno, res, req.url);
         } else {
-            // otherwise, send the parsed data and an OK signal
-            res.status(200);
-            res.send(JSON.parse(data));
+            // otherwise, try to parse the data
+            // if it throws an error, send error message
+            // otherwise send data as normal
+            try {
+                data = JSON.parse(data);
+                res.status(200);
+                res.send(data);
+            } catch (error) {
+                fHelp.errorMan(400, res, req.url);
+            }
         }
     });
 });
 
-// creates a new json blob, returns the json blob's contents
-// adds the location header that makes a link to the api endpoint with this blob
+// Creates a new blob
 app.post("/api/jsonblob", (req, res) => {
     // make the fiie
     let fileName = fHelp.fileMaker(req.body, BlobPath);
     // header location is /api/jsonblob/blobID
     // return the content of the file
+
     res.status(201);
     res.location(`${SERVLINK}/api/jsonblob/${fileName}`);
     res.send(req.body);
 });
 
-// PUT -- replaces current blob content and returns the new blob content
+// Updates a specific blob
 app.put("/api/jsonblob/:blobID", (req, res) => {
     // if the file exists
     let fileName = `${BlobPath}/${req.params.blobID}.json`;
+
     if (fs.existsSync(fileName)) {
         fs.writeFile(fileName, JSON.stringify(req.body), (err) => {
             if (err) {
-                fHelp.errorMan(500, res, req.params.blobID);
+                fHelp.errorMan(500, res, req.url);
             } else {
                 res.status(200);
                 res.send(req.body);
             }
-        })
+        });
     } else {
-        fHelp.errorMan(404, res, req.params.blobID);
+        fHelp.errorMan(404, res, req.url);
     }
 });
 
+// Deletes a specific blob
 app.delete("/api/jsonblob/:blobID", (req, res) => {
     // if the file exists
     let fileName = `${BlobPath}/${req.params.blobID}.json`;
+
     if (fs.existsSync(fileName)) {
         fs.rm(fileName, (err) => {
             if (err) {
-                fHelp.errorMan(500, res, req.params.blobID);
+                fHelp.errorMan(500, res, req.url);
             } else {
                 res.status(200);
                 res.send({ message: `Blob ${req.params.blobID} Deleted` });
             }
         })
     } else {
-        fHelp.errorMan(404, res, req.params.blobID);
+        fHelp.errorMan(404, res, req.url);
     }
 });

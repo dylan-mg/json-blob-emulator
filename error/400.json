@@ -1,0 +1,8 @@
+{
+    "message": "Bad Request, please check that your request body and URL are properly formatted",
+    "_links": {
+        "self": {
+            "href": ""
+        }
+    }
+}

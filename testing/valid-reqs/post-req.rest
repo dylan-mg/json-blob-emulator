@@ -1,0 +1,15 @@
+POST http://localhost:1337/api/jsonblob
+Content-Type: application/json
+
+{
+    "Test" : 7,
+    "Test2" : 7,
+    "Test3" : 7,
+    "Test4" : 7,
+    "Test5" : 7,
+    "Test6" : 7
+}
+###
+# place updated id here
+GET http://localhost:1337/api/jsonblob/
+Content-Type: application/json

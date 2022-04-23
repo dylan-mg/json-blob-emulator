@@ -2,7 +2,7 @@
     "message": "Blob does not exist",
     "_links": {
         "self": {
-            "href": "/api/get/"
+            "href": ""
         }
     }
 }

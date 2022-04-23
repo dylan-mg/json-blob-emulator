@@ -7,6 +7,7 @@ const fs = require('fs');
 const fHelp = require('./modules/fileHelpers');
 const port = 1337;
 const SERVLINK = `http://localhost:${port}`;
+const BlobPath = "./blobs";
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,7 +21,7 @@ app.get("/api/jsonblob/:fileName", (req, res) => {
     // designate response type
     res.contentType("application/json");
     // checks to read the file
-    fs.readFile(`blobs/${req.params.fileName}.json`, (err, data) => {
+    fs.readFile(`${BlobPath}/${req.params.fileName}.json`, (err, data) => {
         // if there's an error, 
         if (err) {
             // ...call error handler function
@@ -40,32 +41,40 @@ app.post("/api/jsonblob", (req, res) => {
     // if json
     if (req.headers['content-type'] == "application/json") {
         // make the fiie
-        let fileName = fHelp.fileMaker(req.body, "./blobs");
+        let fileName = fHelp.fileMaker(req.body, BlobPath);
         // header location is /api/jsonblob/blobID
         // return the content of the file
-        res.status(200);
+        res.status(201);
         res.location(`${SERVLINK}/api/jsonblob/${fileName}`);
         res.send(req.body);
     } else {
         // if not JSON, return 415 for unsupported media type
-        res.status(415);
-        res.send("placeholdre");
+        fHelp.errorMan(415, res);
     }
 });
 
 // PUT -- replaces current blob content and returns the new blob content
 app.put("/api/jsonblob/:blobID", (req, res) => {
     // check if req has correct content type
-    // if json
-    // if the file exists
-    // fs write the file
-    // save it
-    // close stream
-    // if error, return error
-    // else return 200
-    // return content of the file
-    // otherwise return 404
-    // if not, return 415 with message
+    if (req.headers['content-type'] == "application/json") {
+        // if the file exists
+        let fileName = `${BlobPath}/${req.params.blobID}.json`;
+        if (fs.existsSync(fileName)) {
+            fs.writeFile(fileName, JSON.stringify(req.body), (err) => {
+                if (err) {
+                    fHelp.errorMan(500, res, req.params.blobID);
+                } else {
+                    res.status(200);
+                    res.send(req.body);
+                }
+            })
+        } else {
+            fHelp.errorMan(404, res, req.params.blobID);
+        }
+    } else {
+        // if not JSON, return 415 for unsupported media type
+        fHelp.errorMan(415, res, req.params.blobID);
+    }
 });
 
 app.delete("/api/jsonblob/:blobID", (req, res) => {

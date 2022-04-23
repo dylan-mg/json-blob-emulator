@@ -1,5 +1,5 @@
 # GET req for dogs jsonblob
-GET http://localhost:1337/api/jsonblob/0
+GET http://localhost:1337/api/jsonblob/1650687700016
 Content-Type: application/json
 
 ###
@@ -19,7 +19,7 @@ Content-Type: application/json
 ###
 
 # I updated the beatles
-PUT https://jsonblob.com/api/jsonBlob/960203277589561344
+PUT http://localhost:1337/api/jsonblob/1650687700016
 Content-Type: application/json
 
 {
